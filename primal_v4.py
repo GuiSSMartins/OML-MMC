@@ -18,13 +18,11 @@ def primal_v4(x_til,y,w_0,T,miu):
             if y_chapeu[n] == 0:
                 y_chapeu[n] = -1
             if y_chapeu[n] != y[n]:
-                w_til[t+1] = w_til[t] + (miu/2)*(y_chapeu[n] - y[n])*x_til[n]
+                w_til.append(w_til[-1] + (miu/2)*(y_chapeu[n] - y[n])*x_til[n])
                 count[tau] = count[tau] + 1
-            else:
-                w_til[t+1] = w_til[t]
-            custo_t =[(miu/2)*abs(y[p]-y_chapeu[p] for p in range(N))]  
-            E[t] = (1/N)*sum(custo_t)
             t = t + 1
+            custo_t =[(miu/2)*abs(y[p]-y_chapeu[p] for p in range(N))]  
+            E.append((1/N)*sum(custo_t))
         if count[tau] == 0:
             return w_til[-1]
     return w_til[-1]
