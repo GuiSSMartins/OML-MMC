@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
 import random
 
 def sigmoid(z):
-    return 1 / (1 + np.exp(-z))
+    return format(1.0 / (1.0 + format(np.exp(-z), 'e')), 'e')
 def sinal(z):
-    return 1 if z > 0.5 else 0
+    return 1.0 if z > 0.5 else 0
 def batche(lista, n):
     # Seleciona aleatoriamente n índices únicos da lista
     indices_aleatorios = random.sample(range(len(lista)), n)
@@ -17,7 +17,7 @@ def calcular_erro(alpha, X, Y, A):
     erro = 0
     N = len(X)
     for n in range(N):
-        p_chapeu = sigmoid(sum(alpha * (A[n]) ))
+        p_chapeu = sigmoid(format(sum(alpha * (A[n]) )), 'e')
         if(1 - p_chapeu)<np.e**-12:
             erro -= np.e**-12
         else:
@@ -72,3 +72,20 @@ def CLogDKPd_MGE(X, Y, alpha, eta,epochs,d):
         alpha = alpha - eta * S
         E.append(calcular_erro(alpha, X, Y, A))
     return alpha, E
+
+def grafico_Erro(E):
+    t = list(range(len(E)))
+
+    # Plotando o gráfico
+    plt.plot(t, E, linestyle='-')
+    plt.xticks(t)
+
+    # Configurações adicionais do gráfico
+    plt.xlabel('t')
+    plt.ylabel('E(t)')
+    plt.title('Gráfico de E(t) em função de t')
+    plt.grid(True)
+
+    # Exibindo o gráfico
+    plt.show()
+
