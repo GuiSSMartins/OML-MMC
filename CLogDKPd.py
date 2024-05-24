@@ -17,7 +17,7 @@ def calcular_erro(alpha, X, Y, A):
     erro = 0
     N = len(X)
     for n in range(N):
-        p_chapeu = sigmoid(format(sum(alpha * (A[n]) )), 'e')
+        p_chapeu = sigmoid(format(sum(alpha * (A[n]) ), 'e'))
         if(1 - p_chapeu)<np.e**-12:
             erro -= np.e**-12
         else:
