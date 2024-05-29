@@ -17,14 +17,16 @@ def calculo_accuracy(X, Y, w):
 
 def calcular_erro(Y, p_chapeu):
     N = len(p_chapeu)
+    epsilon = 1e-12
     erro = 0
     for n in range(N):
-        erro += -(Y[n] * np.log(p_chapeu[n]) + (1 - Y[n]) * np.log(1 - p_chapeu[n]))
+        erro -= (Y[n] * np.log(p_chapeu[n] + epsilon) + (1 - Y[n]) * np.log(1 - p_chapeu[n] + epsilon))
     return erro / N
+  
 
 
 def sigmoid(z):
-    return 1 / (1 + np.exp(-z))
+    return 1 / (1 + np.exp(-np.clip(z, -500, 500)))
 def sinal(z):
     return 1 if z > 0.5 else 0
 
@@ -52,7 +54,7 @@ def batche(X, Y, percent_to_keep):
 
 # Algoritmo conforme o pseudocódigo
 def MGmB(X, Y, w, eta,batch_size,epochs):
-    t=0
+    t=epochs/20
     E=[]
     batch_size = batch_size/len(X)
     for epoca in range(epochs):
@@ -61,11 +63,14 @@ def MGmB(X, Y, w, eta,batch_size,epochs):
         S = calculo_S(p_chapeu, Y_batch, X_batch)
         w = w - eta * S
         #print(calculo_accuracy(X, Y, w) )
-        E.append(calcular_erro(Y_batch, p_chapeu))
+        if t==epochs/20:
+            E.append(calcular_erro(Y_batch, p_chapeu))
+            t=0
         #print("Usando : ", len(X_batch)," Elementos")
+        t+=1
     return w, E
 def MGE(X, Y, w, eta,epochs):
-    t=0
+    t=epochs/20
     E=[]
     batch_size = 1/len(X)
     for epoca in range(epochs):
@@ -74,6 +79,9 @@ def MGE(X, Y, w, eta,epochs):
         S = calculo_S(p_chapeu, Y_batch, X_batch)
         w = w - eta * S
         #print(calculo_accuracy(X, Y, w) )
-        E.append(calcular_erro(Y_batch, p_chapeu))
+        if t==epochs/20:
+            E.append(calcular_erro(Y_batch, p_chapeu))
+            t=0
         #print("Usando : ", len(X_batch)," Elementos")
+        t+=1
     return w, E
