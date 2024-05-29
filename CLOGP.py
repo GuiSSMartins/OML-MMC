@@ -54,7 +54,7 @@ def batche(X, Y, percent_to_keep):
 
 # Algoritmo conforme o pseudocódigo
 def MGmB(X, Y, w, eta,batch_size,epochs):
-    t=epochs/20
+    t=np.round(epochs/20)
     E=[]
     batch_size = batch_size/len(X)
     for epoca in range(epochs):
@@ -69,8 +69,9 @@ def MGmB(X, Y, w, eta,batch_size,epochs):
         #print("Usando : ", len(X_batch)," Elementos")
         t+=1
     return w, E
+
 def MGE(X, Y, w, eta,epochs):
-    t=epochs/20
+    t=np.round(epochs/20)
     E=[]
     batch_size = 1/len(X)
     for epoca in range(epochs):
@@ -84,4 +85,28 @@ def MGE(X, Y, w, eta,epochs):
             t=0
         #print("Usando : ", len(X_batch)," Elementos")
         t+=1
+    return w, E
+
+def MGE_Ordenado(X, Y, w, eta,epochs):
+    t=0
+    E=[]
+    N=len(Y)
+    e = np.round(epochs/20)
+    for epoca in range(epochs):
+        if t>= N:
+            t=0
+        X_batch = []  
+        Y_batch = []
+        X_batch.append(X[t])
+        Y_batch.append(Y[t])
+        p_chapeu = calcula_p_chapeu(w, X_batch)
+        S = calculo_S(p_chapeu, Y_batch, X_batch)
+        w = w - eta * S
+        #print(calculo_accuracy(X, Y, w) )
+        if e==np.round(epochs/20):
+            e=0
+            E.append(calcular_erro(Y_batch, p_chapeu))
+        #print("Usando : ", len(X_batch)," Elementos")
+        t += 1
+        e += 1
     return w, E
